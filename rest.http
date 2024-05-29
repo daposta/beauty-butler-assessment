@@ -1,0 +1,30 @@
+### register new user
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "email": "oladapo@x.com",
+    "password": "secret",
+    "role": "merchant"
+   
+}
+
+
+### login user 7030052453, 8071172381
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    
+}
+
+
+
+### login user 7030052453, 8071172381
+POST http://localhost:3000/api/auth/logout
+Content-Type: application/json
+
+{
+    "phoneNumber": "1234567890",
+    "password": "password1"
+}
