@@ -1,16 +1,28 @@
-const { findUserByEmail, createUser } = require("../services/users.services");
+const {
+  findUserByEmail,
+  createUser,
+  loginUser,
+} = require("../services/users.services");
 
 const login = async (req, res) => {
-  res.send("login");
-};
+  const { email, password } = req.body;
+  const user = await loginUser(email, password);
 
-const register = async (req, res) => {
-  const user = await createUser(req.body);
+  if (user === null) {
+    return res.status(400).send({ error: "Invalid credentials." });
+  }
   res.status(201).json(user);
 };
 
+const register = async (req, res) => {
+  const token = await createUser(req.body);
+
+  res.status(201).json({ token });
+};
+
 const logout = async (req, res) => {
-  res.send("logout");
+  const user = await loginU(req.body);
+  res.status(201).json(user);
 };
 
 module.exports = { login, register, logout };

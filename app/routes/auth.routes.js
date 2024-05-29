@@ -8,7 +8,6 @@ const {
 } = require("../validators/auth.validators");
 const validatorMiddleware = require("../middlewares/validators.middleware");
 
-console.log("inside auth");
 authRouter.post("/login", loginValidator(), validate, login);
 
 authRouter.post("/register", registerValidator(), validate, register);
