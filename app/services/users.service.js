@@ -8,7 +8,7 @@ const ALGORITHM = process.env.ALGORITHM;
 const createUser = async (user) => {
   const hashedPassword = await bcrypt.hash(user.password, 10);
   user["password"] = hashedPassword;
-  const newUser = await usersModel.create(user);
+  const newUser = await User.create(user);
   const token = jwt.sign({ _id: newUser._id.toString() }, SECRET_KEY, {});
   return token;
 };
