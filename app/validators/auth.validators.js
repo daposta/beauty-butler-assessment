@@ -1,5 +1,5 @@
 const { body, validationResult } = require("express-validator");
-const { findUserByEmail } = require("../services/users.services");
+const { findUserByEmail } = require("../services/users.service");
 
 const loginValidator = () => [
   body("email").isEmail().withMessage("Invalid email address"),
@@ -7,6 +7,9 @@ const loginValidator = () => [
 ];
 
 const registerValidator = () => [
+  body("name")
+    .isLength({ min: 1 })
+    .withMessage("Name must be at least 1 character"),
   body("email")
     .isEmail()
     .withMessage("Invalid email address")

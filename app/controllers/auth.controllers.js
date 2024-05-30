@@ -1,8 +1,4 @@
-const {
-  findUserByEmail,
-  createUser,
-  loginUser,
-} = require("../services/users.services");
+const { createUser, loginUser } = require("../services/users.service");
 
 const login = async (req, res) => {
   const { email, password } = req.body;

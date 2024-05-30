@@ -3,9 +3,10 @@ POST http://localhost:3000/api/auth/register
 Content-Type: application/json
 
 {
-    "email": "dell@x.com",
+    "name": "Ismo",
+    "email": "ismo@x.com",
     "password": "secret",
-    "role": "merchant"
+    "role": "customer"
    
 }
 
@@ -15,7 +16,7 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "dell@x.com",
+    "email": "shab@x.com",
     "password": "secret"
     
 }
@@ -30,3 +31,21 @@ Content-Type: application/json
     "phoneNumber": "1234567890",
     "password": "password1"
 }
+
+
+### create schedule
+POST http://localhost:3000/api/merchants/schedules
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjU4MDU5ODkwOWE5ZDRjNjJlZmVmZmMiLCJpYXQiOjE3MTcwNDQ2MzJ9.-E1QhNo6On1x1iX6k9RsvUVNkAG0Qej2xay5oHy7NsU
+
+{
+   "scheduleDate": "2024-06-01",
+  "startTime": "09:00",
+  "endTime": "17:00"
+
+}
+
+### FETCH SChedules
+GET  http://localhost:3000/api/merchants/schedules
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjU4MDU5ODkwOWE5ZDRjNjJlZmVmZmMiLCJpYXQiOjE3MTcwNDQ2MzJ9.-E1QhNo6On1x1iX6k9RsvUVNkAG0Qej2xay5oHy7NsU

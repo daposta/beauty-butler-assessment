@@ -1,11 +1,28 @@
-const { register, login, logout } = require("../controllers/auth.controllers");
+const isMerchant = require("../middlewares/merchant.middleware");
+const auth = require("../middlewares/auth.middleware");
+const {
+  fetchSchedules,
+  createSchedule,
+  fetchAppointments,
+} = require("../controllers/merchants.controller");
+const {
+  validateSchedule,
+  validate,
+} = require("../validators/merchant.validators");
 
-const routes = require("express").Router();
+const merchantRoutes = require("express").Router();
 
-routes.post("/login", login);
+merchantRoutes.get("/schedules", auth, isMerchant, fetchSchedules);
 
-routes.post("/register", login);
+merchantRoutes.post(
+  "/schedules",
+  auth,
+  isMerchant,
+  validateSchedule,
+  validate,
+  createSchedule
+);
 
-routes.post("/logout", logout);
+// merchantRoutes.post("/appointments", auth, isMerchant, fetchAppointments);
 
-module.exports = routes;
+module.exports = merchantRoutes;

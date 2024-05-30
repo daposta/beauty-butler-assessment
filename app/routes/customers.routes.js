@@ -2,9 +2,9 @@ const { register, login, logout } = require("../controllers/auth.controllers");
 
 const routes = require("express").Router();
 
-routes.post("/login", login);
+routes.get("/available-merchants", login);
 
-routes.post("/register", login);
+routes.post("/appointment", login);
 
 routes.post("/logout", logout);
 
