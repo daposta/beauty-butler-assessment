@@ -14,13 +14,12 @@ Features
 - Role-Based Access: Only authenticated users and merchants can access specific routes.
 - Token Blacklisting: Invalidate JWT tokens upon logout to enhance security.
 
-##Getting Started
+## Getting Started
 
-###Prerequisites
+### Prerequisites
 
-- Node.js (version 14.x or higher)
-- MongoDB (local instance or a cloud-based MongoDB service)
-- npm (Node package manager)
+- Docker
+- Docker Compose
 
 ## Installation
 
