@@ -73,17 +73,16 @@ docker-compose up --build
 
 ### Merchant Management
 
-- Create Schedule: POST /api/schedules
-- Get Schedules: GET /api/schedules
-- Update Schedule: PUT /api/schedules/:id
-- Delete Schedule: DELETE /api/schedules/:id
+- Create Schedule: POST /api/merchants/schedules
+- Get Schedules: GET /api/merchants/schedules
 
 ### Appointment Booking
 
-- Create Appointment: POST /api/appointments
-- Get Appointments: GET /api/appointments
-- Complete Appointment: PUT /api/appointments/:id/complete
-- Cancel Appointment: PUT /api/appointments/:id/cancel
+- Create Appointment: POST /api/customers/appointments
+- Get Appointments: GET /api/merchants/appointments
+- Complete Appointment: PUT /api/merchants/appointments/:id/complete
+- Cancel Appointment: PUT /api/merchants/appointments/:id/cancel
+- Get Available Merchants: /api/customers/merchants
 
 ## Data Models
 
