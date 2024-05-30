@@ -20,7 +20,7 @@ const merchantRoutes = require("express").Router();
 merchantRoutes.get("/schedules", auth, isMerchant, fetchSchedules);
 merchantRoutes.get("/appointments", auth, isMerchant, fetchMyAppointments);
 merchantRoutes.put(
-  "/appointments/cancel/:id",
+  "/appointments/:id/cancel",
   auth,
   isMerchant,
   cancelAppointmentValidation,
@@ -28,7 +28,7 @@ merchantRoutes.put(
   cancelAppointment
 );
 merchantRoutes.put(
-  "/appointments/complete/:id",
+  "/appointments/:id/complete",
   auth,
   isMerchant,
   completeAppointmentValidation,

@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "dev": "nodemon app/index.js",
     "start": "node app/index.js",
     "swagger": "node app/config/swagger.js"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "author": "Oladapo Lawore",
   "license": "ISC",
@@ -24,6 +28,8 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.1"
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.1",
+    "supertest": "^7.0.0"
   }
 }

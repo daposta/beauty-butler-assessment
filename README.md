@@ -97,6 +97,9 @@ docker-compose up --build
 
 - Fields: customerId, merchantId, appointmentDate, startTime, endTime, status
 
+### Blacklist
+- Fields: token, expiry
+
 ### Validation
 
 Validation is handled using express-validator. The validators ensure that data is correctly formatted and that there are no conflicting schedules or appointments.
