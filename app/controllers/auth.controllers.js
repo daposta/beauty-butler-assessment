@@ -17,7 +17,7 @@ const register = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const user = await loginU(req.body);
+  const user = null;
   res.status(201).json(user);
 };
 

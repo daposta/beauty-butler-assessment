@@ -1,5 +1,6 @@
-const { body, validationResult } = require("express-validator");
+const { body, param, validationResult } = require("express-validator");
 const { findSchedule } = require("../services/merchant.service");
+const { findAppointmentById } = require("../services/customer.service");
 
 const timeFormatRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
@@ -30,6 +31,40 @@ const validateSchedule = [
     .withMessage("End time must be in HH:mm format (e.g., 14:15)"),
 ];
 
+const cancelAppointmentValidation = [
+  param("id", "Invalid appointment ID")
+    .isMongoId()
+    .custom(async (value, { req }) => {
+      const appointment = await findAppointmentById(value);
+      //you can only modify apppoitment in 'scheduled' state
+      if (appointment.status != "scheduled") {
+        throw new Error("Appointment has already been treated");
+      }
+
+      //you cannot modify an appointment that is not yours
+      if (appointment.merchantId.toString() != req.user._id.toString()) {
+        throw new Error("You cannot modify  appointment");
+      }
+    }),
+];
+
+const completeAppointmentValidation = [
+  param("id", "Invalid appointment ID")
+    .isMongoId()
+    .custom(async (value, { req }) => {
+      const appointment = await findAppointmentById(value);
+      //you can only modify apppoitment in 'scheduled' state
+      if (appointment.status != "scheduled") {
+        throw new Error("Appointment has already been treated");
+      }
+
+      //you cannot modify an appointment that is not yours
+      if (appointment.merchantId.toString() != req.user._id.toString()) {
+        throw new Error("You cannot modify  appointment");
+      }
+    }),
+];
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -38,4 +73,9 @@ const validate = (req, res, next) => {
   next();
 };
 
-module.exports = { validateSchedule, validate };
+module.exports = {
+  validateSchedule,
+  validate,
+  cancelAppointmentValidation,
+  completeAppointmentValidation,
+};

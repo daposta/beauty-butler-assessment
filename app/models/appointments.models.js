@@ -1,14 +1,21 @@
 // models/Appointment.js
 const mongoose = require("mongoose");
 
-const appointmentSchema = new mongoose.Schema({
+const AppointmentSchema = new mongoose.Schema({
   merchantId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Merchant",
     required: true,
   },
-  date: { type: Date, required: true },
-  time: { type: String, required: true },
+  appointmentDate: { type: Date, required: true },
+  startTime: {
+    type: String,
+    required: true,
+  },
+  endTime: {
+    type: String,
+    required: true,
+  },
   customerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -21,4 +28,4 @@ const appointmentSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Appointment", appointmentSchema);
+module.exports = mongoose.model("Appointment", AppointmentSchema);
