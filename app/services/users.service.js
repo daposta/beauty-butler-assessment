@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const usersModel = require("../models/users.models");
+const { User, Blacklist } = require("../models/users.models");
 
 const SECRET_KEY = process.env.SECRET_KEY;
 const ALGORITHM = process.env.ALGORITHM;
@@ -30,13 +30,25 @@ const loginUser = async (email, password) => {
 };
 
 const findUserById = async (id) => {
-  const user = await usersModel.findById(id);
+  const user = await User.findById(id);
   return user;
 };
 
 const findUserByEmail = async (email) => {
-  const user = await usersModel.findOne({ email });
+  const user = await User.findOne({ email });
   return user;
 };
 
-module.exports = { createUser, findUserById, findUserByEmail, loginUser };
+const blacklistTokens = async (token) => {
+  const decoded = jwt.decode(token);
+  const expiry = new Date(decoded.iat * 1000);
+  const data = await Blacklist.create({ token, expiry });
+};
+
+module.exports = {
+  createUser,
+  findUserById,
+  findUserByEmail,
+  loginUser,
+  blacklistTokens,
+};

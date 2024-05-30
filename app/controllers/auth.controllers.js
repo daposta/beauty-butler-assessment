@@ -1,4 +1,8 @@
-const { createUser, loginUser } = require("../services/users.service");
+const {
+  createUser,
+  loginUser,
+  blacklistTokens,
+} = require("../services/users.service");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -17,8 +21,10 @@ const register = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  const user = null;
-  res.status(201).json(user);
+  const token = req.header("Authorization").replace("Bearer ", "");
+
+  await blacklistTokens(token);
+  res.status(200).json({ message: "Logout successful" });
 };
 
 module.exports = { login, register, logout };
