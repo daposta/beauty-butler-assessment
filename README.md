@@ -19,15 +19,14 @@ Features
 ### Prerequisites
 
 - Docker
-- Docker Compose
 
 ## Installation
 
 1. **Clone the repository**:
 
 ```bash
-git clone https://github.com/your-username/appointment-booking-system.git
-cd appointment-booking-system
+git https://github.com/daposta/beauty-butler-assessment.git
+cd beauty-butler-assessment
 ```
 
 2. **Set up environment variables**:

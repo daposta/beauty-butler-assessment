@@ -7,7 +7,7 @@ const {
   findUserByEmail,
   loginUser,
   blacklistTokens,
-} = require("../services/user.service");
+} = require("../services/users.service");
 
 // Mock the dependencies
 jest.mock("bcryptjs");
