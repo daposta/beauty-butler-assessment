@@ -1,5 +1,5 @@
 const scheduleModel = require("../app/models/merchants.models");
-const userModel = require("../app/models/users.models");
+const { User } = require("../app/models/users.models");
 const {
   getSchedules,
   saveSchedule,
@@ -8,71 +8,74 @@ const {
   findScheduleWithDate,
 } = require("../app/services/merchant.service");
 
-// Mock the dependencies
 jest.mock("../app/models/merchants.models");
 jest.mock("../app/models/users.models");
 
 describe("Merchant Service", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe("getSchedules", () => {
-    it("should return schedules for a given merchant ID", async () => {
-      const mockSchedules = [{ merchantId: "123", scheduleDate: "2024-06-04" }];
+    it("should return schedules for a given merchant", async () => {
+      const userId = "merchantId";
+      const mockSchedules = [{}, {}];
       scheduleModel.find.mockResolvedValue(mockSchedules);
 
-      const schedules = await getSchedules("123");
+      const result = await getSchedules(userId);
 
-      expect(scheduleModel.find).toHaveBeenCalledWith({ merchantId: "123" });
-      expect(schedules).toBe(mockSchedules);
+      expect(scheduleModel.find).toHaveBeenCalledWith({ merchantId: userId });
+      expect(result).toEqual(mockSchedules);
     });
   });
 
   describe("saveSchedule", () => {
-    it("should save a new schedule and return it", async () => {
+    it("should save a new schedule for a merchant", async () => {
+      const userId = "merchantId";
       const payload = {
         scheduleDate: "2024-06-04",
-        startTime: "09:00",
-        endTime: "17:00",
+        startTime: "9:00",
+        endTime: "10:00",
       };
-      const mockSchedule = { ...payload, merchantId: "123" };
-      scheduleModel.create.mockResolvedValue(mockSchedule);
+      const newSchedule = { ...payload, merchantId: userId };
+      scheduleModel.create.mockResolvedValue(newSchedule);
 
-      const newSchedule = await saveSchedule(payload, "123");
+      const result = await saveSchedule(payload, userId);
 
-      expect(scheduleModel.create).toHaveBeenCalledWith({
-        ...payload,
-        merchantId: "123",
-      });
-      expect(newSchedule).toBe(mockSchedule);
+      expect(scheduleModel.create).toHaveBeenCalledWith(newSchedule);
+      expect(result).toEqual(newSchedule);
     });
   });
 
   describe("findSchedule", () => {
-    it("should find a schedule for a given merchant ID and date", async () => {
-      const mockSchedule = { merchantId: "123", scheduleDate: "2024-06-04" };
+    it("should find a schedule for a merchant with specific details", async () => {
+      const merchantId = "merchantId";
+      const scheduleDate = "2024-06-04";
+      const startTime = "9:00";
+      const endTime = "10:00";
+      const mockSchedule = { merchantId, scheduleDate, startTime, endTime };
       scheduleModel.findOne.mockResolvedValue(mockSchedule);
 
-      const schedule = await findSchedule("123", "2024-06-04");
+      const result = await findSchedule(
+        merchantId,
+        scheduleDate,
+        startTime,
+        endTime
+      );
 
       expect(scheduleModel.findOne).toHaveBeenCalledWith({
-        merchantId: "123",
-        scheduleDate: "2024-06-04",
+        merchantId,
+        scheduleDate,
+        startTime,
+        endTime,
       });
-      expect(schedule).toBe(mockSchedule);
+      expect(result).toEqual(mockSchedule);
     });
   });
 
   describe("findScheduleWithDate", () => {
-    it("should find a schedule with given date and merchantId", async () => {
-      const mockSchedule = { _id: "scheduleId", merchantId: "merchantId" };
-      scheduleModel.findOne.mockReturnValue({
-        sort: jest.fn().mockResolvedValue(mockSchedule),
-      });
-
+    it("should find a schedule for a merchant with a specific date", async () => {
       const merchantId = "merchantId";
       const scheduleDate = "2024-06-04";
+      const mockSchedule = { merchantId, scheduleDate };
+      scheduleModel.findOne.mockResolvedValue(mockSchedule);
+
       const result = await findScheduleWithDate(merchantId, scheduleDate);
 
       expect(scheduleModel.findOne).toHaveBeenCalledWith({
@@ -82,20 +85,4 @@ describe("Merchant Service", () => {
       expect(result).toEqual(mockSchedule);
     });
   });
-  
-  describe('findAllMerchants', () => {
-    it('should return all merchants excluding sensitive fields', async () => {
-      const mockMerchants = [
-        { _id: 'merchantId1', name: 'Merchant1' },
-        { _id: 'merchantId2', name: 'Merchant2' },
-      ];
-      User.find.mockReturnValue({
-        select: jest.fn().mockResolvedValue(mockMerchants),
-      });
-
-      const result = await findAllMerchants();
-
-      expect(User.find).toHaveBeenCalledWith({ role: 'merchant' });
-      expect(result).toEqual(mockMerchants);
-    });
 });

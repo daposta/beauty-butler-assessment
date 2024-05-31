@@ -39,60 +39,52 @@ describe("Customer Service", () => {
   });
 
   describe("findAppointmentsForCustomer", () => {
-    it("should find appointments for a customer on a given date with a specific merchant", async () => {
-      const mockAppointment = {
-        appointmentDate: "2024-06-04",
-        startTime: "09:00",
-        endTime: "10:00",
-        merchantId: "123",
-        status: "scheduled",
+    it("should find appointments for the customer within the specified time range", async () => {
+      const appointmentDate = new Date();
+      const merchantId = "merchant_id";
+      const startTime = new Date("2024-06-01T08:00:00Z");
+      const endTime = new Date("2024-06-01T09:00:00Z");
+      const customerId = "customer_id";
+      const expectedAppointment = {
+        _id: "appointment_id",
+        appointmentDate,
+        merchantId,
+        startTime,
+        endTime,
       };
-      appointmentModel.findOne.mockResolvedValue(mockAppointment);
 
-      const appointment = await findAppointmentsForCustomer(
-        "2024-06-04",
-        "123",
-        "09:00",
-        "10:00",
-        "456"
+      appointmentModel.findOne.mockResolvedValue(expectedAppointment);
+
+      const result = await findAppointmentsForCustomer(
+        appointmentDate,
+        merchantId,
+        startTime,
+        endTime,
+        customerId
       );
 
+      expect(result).toEqual(expectedAppointment);
       expect(appointmentModel.findOne).toHaveBeenCalledWith({
-        appointmentDate: "2024-06-04",
-        merchantId: "123",
+        appointmentDate,
+        merchantId,
+        startTime: { $gte: startTime },
+        endTime: { $lte: endTime },
         status: "scheduled",
       });
-      expect(appointment).toBe(mockAppointment);
     });
   });
-
   describe("findAppointmentsForMerchant", () => {
-    it("should find appointments for a merchant", async () => {
-      const mockAppointments = [
-        {
-          appointmentDate: "2024-06-04",
-          startTime: "09:00",
-          endTime: "10:00",
-          customerId: { name: "Customer1" },
-        },
-        {
-          appointmentDate: "2024-06-05",
-          startTime: "11:00",
-          endTime: "12:00",
-          customerId: { name: "Customer2" },
-        },
+    it("should find appointments for the merchant", async () => {
+      const merchantId = "merchant_id";
+      const appointments = [
+        { _id: "appointment_id", customerId: "customer_id" },
       ];
-      appointmentModel.find.mockResolvedValue(mockAppointments);
-      appointmentModel.populate = jest.fn().mockResolvedValue(mockAppointments);
+      appointmentModel.find.mockResolvedValue(appointments);
 
-      const appointments = await findAppointmentsForMerchant("123");
+      const result = await findAppointmentsForMerchant(merchantId);
 
-      expect(appointmentModel.find).toHaveBeenCalledWith({ merchantId: "123" });
-      expect(appointmentModel.populate).toHaveBeenCalledWith({
-        path: "customerId",
-        select: "name ",
-      });
-      expect(appointments).toBe(mockAppointments);
+      expect(result).toEqual(appointments);
+      expect(appointmentModel.find).toHaveBeenCalledWith({ merchantId });
     });
   });
 

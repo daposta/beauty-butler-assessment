@@ -24,17 +24,24 @@ const findSchedule = async (merchantId, scheduleDate, startTime, endTime) => {
 };
 
 const findScheduleWithDate = async (merchantId, scheduleDate) => {
-  return await scheduleModel
-    .findOne({
-      merchantId,
-      scheduleDate,
-    })
-    .sort({ updatedAt: -1 });
+  return await scheduleModel.findOne({
+    merchantId,
+    scheduleDate,
+  });
 };
 
 const findAllMerchants = async () => {
-  return await User.find({ role: "merchant" }).select(
-    "-password -isActive -email -role -createdAt -updatedAt -__v"
+  return await User.find(
+    { role: "merchant" },
+    {
+      password: 0,
+      isActive: 0,
+      email: 0,
+      role: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+    }
   );
 };
 

@@ -23,14 +23,10 @@ const findAppointmentsForCustomer = async (
 };
 
 const findAppointmentsForMerchant = async (merchantId) => {
-  const appointments = await appointmentModel
-    .find({
-      merchantId,
-    })
-    .populate({
-      path: "customerId",
-      select: "name ",
-    });
+  const appointments = await appointmentModel.find({ merchantId }).populate({
+    path: "customerId",
+    select: "name ",
+  });
 
   return appointments;
 };
