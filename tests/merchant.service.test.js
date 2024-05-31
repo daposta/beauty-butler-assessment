@@ -1,15 +1,15 @@
-const scheduleModel = require("../models/merchants.models");
-const userModel = require("../models/users.models");
+const scheduleModel = require("../app/models/merchants.models");
+const userModel = require("../app/models/users.models");
 const {
   getSchedules,
   saveSchedule,
   findSchedule,
   findAllMerchants,
-} = require("../services/merchant.service");
+} = require("../app/services/merchant.service");
 
 // Mock the dependencies
-jest.mock("../models/merchants.models");
-jest.mock("../models/users.models");
+jest.mock("../app/models/merchants.models");
+jest.mock("../app/models/users.models");
 
 describe("Merchant Service", () => {
   beforeEach(() => {
@@ -66,20 +66,18 @@ describe("Merchant Service", () => {
   describe("findAllMerchants", () => {
     it("should return all merchants excluding sensitive fields", async () => {
       const mockMerchants = [
-        { name: "Merchant1", email: "merchant1@example.com", role: "merchant" },
-        { name: "Merchant2", email: "merchant2@example.com", role: "merchant" },
+        { name: "Merchant 1", _id: "1" },
+        { name: "Merchant 2", _id: "2" },
       ];
 
-      // Setup the mock chain
-      const findMock = {
-        select: jest.fn().mockResolvedValue(mockMerchants),
-      };
-      userModel.find.mockReturnValue(findMock);
+      // Correctly mock the find and select methods
+      const selectMock = jest.fn().mockResolvedValue(mockMerchants);
+      userModel.find.mockImplementation(() => ({ select: selectMock }));
 
       const merchants = await findAllMerchants();
 
       expect(userModel.find).toHaveBeenCalledWith({ role: "merchant" });
-      expect(findMock.select).toHaveBeenCalledWith(
+      expect(selectMock).toHaveBeenCalledWith(
         "-password -isActive -email -role -createdAt -updatedAt -__v"
       );
       expect(merchants).toBe(mockMerchants);

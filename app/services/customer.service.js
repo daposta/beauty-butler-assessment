@@ -15,10 +15,7 @@ const findAppointmentsForCustomer = async (
 ) => {
   return await appointmentModel.findOne({
     appointmentDate,
-    // startTime: { $gte: startTime },
-    // endTime: { $lte: endTime },
     merchantId,
-
     status: "scheduled",
   });
   $or: [

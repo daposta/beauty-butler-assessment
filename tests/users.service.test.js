@@ -1,18 +1,18 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User, Blacklist } = require("../models/users.models");
+const { User, Blacklist } = require("../app/models/users.models");
 const {
   createUser,
   findUserById,
   findUserByEmail,
   loginUser,
   blacklistTokens,
-} = require("../services/users.service");
+} = require("../app/services/users.service");
 
 // Mock the dependencies
 jest.mock("bcryptjs");
 jest.mock("jsonwebtoken");
-jest.mock("../models/users.models");
+jest.mock("../app/models/users.models");
 
 describe("User Service", () => {
   beforeEach(() => {
