@@ -16,8 +16,8 @@ const loginUserWithPassword = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { email, password } = req.body;
-  const token = await createUser({ email, password });
+  const { name, email, password, role } = req.body;
+  const token = await createUser({ name, email, password, role });
 
   res.status(201).json({ token });
 };
