@@ -8,7 +8,7 @@ const {
   loginUserWithPassword,
   registerUser,
   logout,
-} = require("../app/controllers/auth.controller");
+} = require("../app/controllers/auth.controllers");
 
 jest.mock("../app/services/users.service");
 

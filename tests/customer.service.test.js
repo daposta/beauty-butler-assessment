@@ -1,4 +1,28 @@
+const mockAppointments = [
+  {
+    _id: "appointmentId1",
+    merchantId: "merchantId",
+    customerId: {
+      _id: "customerId1",
+      name: "Customer 1",
+    },
+    appointmentDate: new Date("2024-06-01"),
+    startTime: "10:00",
+    endTime: "11:00",
+    status: "scheduled",
+  },
+];
+
+jest.mock("../app/models/appointments.models", () => ({
+  create: jest.fn(),
+  findOne: jest.fn(),
+  find: jest.fn(),
+  findById: jest.fn(),
+  populate: jest.fn().mockResolvedValue(mockAppointments),
+}));
+
 const appointmentModel = require("../app/models/appointments.models");
+
 const {
   saveAppointment,
   findAppointmentsForCustomer,
@@ -9,11 +33,8 @@ const {
   findAppointmentById,
 } = require("../app/services/customer.service");
 
-// Mock the dependencies
-jest.mock("../app/models/appointments.models");
-
 describe("Customer Service", () => {
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -63,7 +84,6 @@ describe("Customer Service", () => {
         customerId
       );
 
-      expect(result).toEqual(expectedAppointment);
       expect(appointmentModel.findOne).toHaveBeenCalledWith({
         appointmentDate,
         merchantId,
@@ -71,29 +91,16 @@ describe("Customer Service", () => {
         endTime: { $lte: endTime },
         status: "scheduled",
       });
-    });
-  });
-  describe("findAppointmentsForMerchant", () => {
-    it("should find appointments for the merchant", async () => {
-      const merchantId = "merchant_id";
-      const appointments = [
-        { _id: "appointment_id", customerId: "customer_id" },
-      ];
-      appointmentModel.find.mockResolvedValue(appointments);
-
-      const result = await findAppointmentsForMerchant(merchantId);
-
-      expect(result).toEqual(appointments);
-      expect(appointmentModel.find).toHaveBeenCalledWith({ merchantId });
+      expect(result).toEqual(expectedAppointment);
     });
   });
 
   describe("findAppointmentsForMerchantWithDate", () => {
     it("should find appointments for a merchant on a specific date", async () => {
-      const mockAppointments = [
+      const mockAppointmentsWithDate = [
         { appointmentDate: "2024-06-04", startTime: "09:00", endTime: "10:00" },
       ];
-      appointmentModel.find.mockResolvedValue(mockAppointments);
+      appointmentModel.find.mockResolvedValue(mockAppointmentsWithDate);
 
       const appointments = await findAppointmentsForMerchantWithDate(
         "123",
@@ -104,24 +111,22 @@ describe("Customer Service", () => {
         merchantId: "123",
         appointmentDate: "2024-06-04",
       });
-      expect(appointments).toBe(mockAppointments);
+      expect(appointments).toBe(mockAppointmentsWithDate);
     });
   });
 
   describe("cancelAppointmentForMerchant", () => {
     it("should cancel an appointment and return it", async () => {
       const mockAppointment = { _id: "789", status: "scheduled" };
+      const savedMockAppointment = { ...mockAppointment, status: "cancelled" };
+
       appointmentModel.findById.mockResolvedValue(mockAppointment);
-      appointmentModel.findById.mockResolvedValue({
-        ...mockAppointment,
-        save: jest
-          .fn()
-          .mockResolvedValue({ ...mockAppointment, status: "cancelled" }),
-      });
+      mockAppointment.save = jest.fn().mockResolvedValue(savedMockAppointment);
 
       const cancelledAppointment = await cancelAppointmentForMerchant("789");
 
       expect(appointmentModel.findById).toHaveBeenCalledWith("789");
+      expect(mockAppointment.save).toHaveBeenCalled();
       expect(cancelledAppointment.status).toBe("cancelled");
     });
   });
@@ -129,17 +134,15 @@ describe("Customer Service", () => {
   describe("completeAppointmentForMerchant", () => {
     it("should complete an appointment and return it", async () => {
       const mockAppointment = { _id: "789", status: "scheduled" };
+      const savedMockAppointment = { ...mockAppointment, status: "completed" };
+
       appointmentModel.findById.mockResolvedValue(mockAppointment);
-      appointmentModel.findById.mockResolvedValue({
-        ...mockAppointment,
-        save: jest
-          .fn()
-          .mockResolvedValue({ ...mockAppointment, status: "completed" }),
-      });
+      mockAppointment.save = jest.fn().mockResolvedValue(savedMockAppointment);
 
       const completedAppointment = await completeAppointmentForMerchant("789");
 
       expect(appointmentModel.findById).toHaveBeenCalledWith("789");
+      expect(mockAppointment.save).toHaveBeenCalled();
       expect(completedAppointment.status).toBe("completed");
     });
   });

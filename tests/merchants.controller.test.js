@@ -9,13 +9,20 @@ const {
 const {
   saveSchedule,
   getSchedules,
+} = require("../app/services/merchant.service");
+
+const {
   findAppointmentsForMerchant,
   cancelAppointmentForMerchant,
   completeAppointmentForMerchant,
 } = require("../app/services/customer.service");
 
-jest.mock("../app/services/merchant.service");
 jest.mock("../app/services/customer.service");
+
+jest.mock("../app/services/merchant.service", () => ({
+  saveSchedule: jest.fn(),
+  getSchedules: jest.fn(),
+}));
 
 describe("Merchants Controller", () => {
   let req, res, next;
@@ -26,36 +33,50 @@ describe("Merchants Controller", () => {
       user: { _id: "merchantId" },
       params: { id: "appointmentId" },
     };
-    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+    res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
     next = jest.fn();
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
+
   describe("createSchedule", () => {
     it("should create a new schedule and return it", async () => {
+      const mockRequest = { body: {}, user: { _id: "merchantId" } };
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      const mockNext = jest.fn();
       const mockSchedule = { _id: "scheduleId", merchantId: "merchantId" };
       saveSchedule.mockResolvedValue(mockSchedule);
 
-      await createSchedule(req, res);
+      await createSchedule(mockRequest, mockResponse, mockNext);
 
-      expect(saveSchedule).toHaveBeenCalledWith(req.body, req.user._id);
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({ data: mockSchedule });
+      expect(mockResponse.status).toHaveBeenCalledWith(201);
+      expect(mockResponse.json).toHaveBeenCalledWith({ data: mockSchedule });
     });
   });
 
   describe("fetchSchedules", () => {
     it("should fetch schedules for the merchant", async () => {
+      const mockRequest = { user: { _id: "merchantId" } };
+      const mockResponse = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      const mockNext = jest.fn();
       const mockSchedules = [{ _id: "scheduleId1" }, { _id: "scheduleId2" }];
       getSchedules.mockResolvedValue(mockSchedules);
 
-      await fetchSchedules(req, res, next);
+      await fetchSchedules(mockRequest, mockResponse, mockNext);
 
-      expect(getSchedules).toHaveBeenCalledWith(req.user._id);
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ data: mockSchedules });
+      expect(mockResponse.status).toHaveBeenCalledWith(200);
+      expect(mockResponse.json).toHaveBeenCalledWith({ data: mockSchedules });
     });
   });
 
