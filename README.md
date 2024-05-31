@@ -25,7 +25,7 @@ Features
 1. **Clone the repository**:
 
 ```bash
-git https://github.com/daposta/beauty-butler-assessment.git
+git clone https://github.com/daposta/beauty-butler-assessment.git
 cd beauty-butler-assessment
 ```
 
@@ -54,8 +54,8 @@ DB_ADMIN_PW=example
 3. **Run the application**:
 
 ```bash
-docker build -t beauty-butter:latest .
-docker run  -p 3000:3000 beauty-butter
+docker build -t beauty-butler:latest .
+docker run  -p 3000:3000 beauty-butler
 
 ```
 
@@ -117,8 +117,9 @@ You can find the API documentation and test the endpoints using Postman by click
 
 ### Running Tests
 
-Unit tests can be run using the following command:
+Unit tests with coverage can be run using the following command:
 
 ```bash
-npm tests
+npm test -- --coverage   
+
 ```
