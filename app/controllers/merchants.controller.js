@@ -10,22 +10,14 @@ const {
 } = require("../services/merchant.service");
 
 const createSchedule = async (req, res) => {
-  try {
-    const result = await saveSchedule(req.body, req.user._id);
-    res.status(201).json({ data: result });
-  } catch (error) {
-    console.log(error);
-  }
+  const result = await saveSchedule(req.body, req.user._id);
+  res.status(201).json({ data: result });
 };
 
 const fetchSchedules = async (req, res) => {
-  try {
-    const result = await getSchedules(req.user._id);
+  const result = await getSchedules(req.user._id);
 
-    res.status(200).json({ data: result });
-  } catch (error) {
-    console.log(error);
-  }
+  res.status(200).json({ data: result });
 };
 
 const fetchMyAppointments = async (req, res) => {

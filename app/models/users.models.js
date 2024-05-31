@@ -11,16 +11,19 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const BlacklistSchema = new mongoose.Schema({
-  token: {
-    type: String,
-    required: true,
+const BlacklistSchema = new mongoose.Schema(
+  {
+    token: {
+      type: String,
+      required: true,
+    },
+    expiry: {
+      type: Date,
+      required: true,
+    },
   },
-  expiry: {
-    type: Date,
-    required: true,
-  },
-});
+  { timestamps: true }
+);
 
 const User = mongoose.model("User", UserSchema);
 const Blacklist = mongoose.model("Blacklist", BlacklistSchema);

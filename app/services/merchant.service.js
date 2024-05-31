@@ -1,5 +1,5 @@
 const scheduleModel = require("../models/merchants.models");
-const userModel = require("../models/users.models");
+const { User } = require("../models/users.models");
 const { findAppointmentsForMerchant } = require("./customer.service");
 
 const getSchedules = async (userId) => {
@@ -14,17 +14,28 @@ const saveSchedule = async (payload, userId) => {
   return newSchedule;
 };
 
-const findSchedule = async (merchantId, scheduleDate) => {
+const findSchedule = async (merchantId, scheduleDate, startTime, endTime) => {
   return await scheduleModel.findOne({
     merchantId,
     scheduleDate,
+    startTime,
+    endTime,
   });
 };
 
+const findScheduleWithDate = async (merchantId, scheduleDate) => {
+  return await scheduleModel
+    .findOne({
+      merchantId,
+      scheduleDate,
+    })
+    .sort({ updatedAt: -1 });
+};
+
 const findAllMerchants = async () => {
-  return await userModel
-    .find({ role: "merchant" })
-    .select("-password -isActive -email -role -createdAt -updatedAt -__v");
+  return await User.find({ role: "merchant" }).select(
+    "-password -isActive -email -role -createdAt -updatedAt -__v"
+  );
 };
 
 module.exports = {
@@ -32,4 +43,5 @@ module.exports = {
   saveSchedule,
   findSchedule,
   findAllMerchants,
+  findScheduleWithDate,
 };

@@ -23,6 +23,4 @@ customerRoutes.post(
   createAppointment
 );
 
-// routes.post("/logout", logout);
-
 module.exports = customerRoutes;
