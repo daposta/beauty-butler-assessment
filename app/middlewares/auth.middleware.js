@@ -1,4 +1,3 @@
-// middleware/auth.js
 const jwt = require("jsonwebtoken");
 const { Blacklist } = require("../models/users.models");
 const { findUserById } = require("../services/users.service");
@@ -19,8 +18,8 @@ const auth = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
-    req.user = await findUserById(decoded._id);
-    if (!req.user) {
+    const user = await findUserById(decoded._id);
+    if (!user) {
       return res.status(401).json({ msg: "Token is not valid" });
     }
 
