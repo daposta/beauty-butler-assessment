@@ -5,6 +5,7 @@ const {
   saveSchedule,
   findSchedule,
   findAllMerchants,
+  findScheduleWithDate,
 } = require("../app/services/merchant.service");
 
 // Mock the dependencies
@@ -63,24 +64,38 @@ describe("Merchant Service", () => {
     });
   });
 
-  describe("findAllMerchants", () => {
-    it("should return all merchants excluding sensitive fields", async () => {
-      const mockMerchants = [
-        { name: "Merchant 1", _id: "1" },
-        { name: "Merchant 2", _id: "2" },
-      ];
+  describe("findScheduleWithDate", () => {
+    it("should find a schedule with given date and merchantId", async () => {
+      const mockSchedule = { _id: "scheduleId", merchantId: "merchantId" };
+      scheduleModel.findOne.mockReturnValue({
+        sort: jest.fn().mockResolvedValue(mockSchedule),
+      });
 
-      // Correctly mock the find and select methods
-      const selectMock = jest.fn().mockResolvedValue(mockMerchants);
-      userModel.find.mockImplementation(() => ({ select: selectMock }));
+      const merchantId = "merchantId";
+      const scheduleDate = "2024-06-04";
+      const result = await findScheduleWithDate(merchantId, scheduleDate);
 
-      const merchants = await findAllMerchants();
-
-      expect(userModel.find).toHaveBeenCalledWith({ role: "merchant" });
-      expect(selectMock).toHaveBeenCalledWith(
-        "-password -isActive -email -role -createdAt -updatedAt -__v"
-      );
-      expect(merchants).toBe(mockMerchants);
+      expect(scheduleModel.findOne).toHaveBeenCalledWith({
+        merchantId,
+        scheduleDate,
+      });
+      expect(result).toEqual(mockSchedule);
     });
   });
+  
+  describe('findAllMerchants', () => {
+    it('should return all merchants excluding sensitive fields', async () => {
+      const mockMerchants = [
+        { _id: 'merchantId1', name: 'Merchant1' },
+        { _id: 'merchantId2', name: 'Merchant2' },
+      ];
+      User.find.mockReturnValue({
+        select: jest.fn().mockResolvedValue(mockMerchants),
+      });
+
+      const result = await findAllMerchants();
+
+      expect(User.find).toHaveBeenCalledWith({ role: 'merchant' });
+      expect(result).toEqual(mockMerchants);
+    });
 });
