@@ -38,16 +38,7 @@ env
 ```bash
 MONGO_URI=mongodb+srv://dapolawore:iLbOPSFwCO8go4js@cluster0.oshmyhx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 PORT=3000
-MONGO_INITDB_ROOT_USERNAME=root
-MONGO_INITDB_ROOT_PASSWORD=example
-MONGO_DB_HOST=mongo
-MONGO_DB_PORT=27017
-MONGO_DB_NAME=butler-db
-ALGORITHM=RS256
-SECRET_KEY=4f6f2eebf45e4aa5320bcfee5fb01f62a4d02004c95159c1d150e09e983eb119
-DB_ADMIN_USER=admin
-DB_ADMIN_PW=example
-
+EXPIRY=7d
 
 ```
 
