@@ -15,7 +15,7 @@ const registerValidator = () => [
     .withMessage("Invalid email address")
     .custom(async (value) => {
       const member = await findUserByEmail(value);
-      console.log(member);
+
       if (member) {
         throw new Error("User already exists");
       }

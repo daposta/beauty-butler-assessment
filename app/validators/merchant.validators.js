@@ -8,7 +8,6 @@ const validateSchedule = [
   body("scheduleDate", "Schedule date is required")
     .isISO8601()
     .custom(async (value, { req }) => {
-      console.log(req.body);
       const { startTime, endTime } = req.body;
       const existingSchedule = await findSchedule(
         req.user._id,
