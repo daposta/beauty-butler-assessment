@@ -13,6 +13,8 @@ Features
 - Data Validation: Ensure no duplicate schedules or appointments, and enforce correct time formats.
 - Role-Based Access: Only authenticated users and merchants can access specific routes.
 - Token Blacklisting: Invalidate JWT tokens upon logout to enhance security.
+- Logging: The application uses morgan for HTTP request logging. Logs are displayed in the console in the 'dev' format.
+- Rate Limiting: The application uses express-rate-limit to limit the number of requests a client can make to the server within a specified timeframe. The rate limiting window is set to 15 minutes. Each IP address is limited to 100 requests per window.
 
 ## Getting Started
 
